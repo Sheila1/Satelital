@@ -5,21 +5,14 @@ var collection = ee.ImageCollection('LANDSAT/LC08/C02/T1_L2');
 //3. select an image from the collection by running a filter
 //define the region to c rop the image to
 var point = ui.Label({
-  value: 'Part 1: Exploring NDVI',
+  value: 'mmm',
   style:{
   fontWeight: 'bold',
   fontSize: '18px'
   }});
 point.style().set('position', 'top-center');
 Map.add(point);
-
-
-
-// Print the point feature
-//print(point);
-
-// Define a feature with properties
-var pointWithProperties = ee.Feature(point, {name: 'aqui'});
+ 
  // Create a polygon feature
 var geometry = ee.Geometry.Polygon(
   [[-66.565, -18.432], [-66.565, -18.832], [-64.565, -18.432], [-64.565, -18.832]]);
