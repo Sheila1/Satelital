@@ -1,0 +1,48 @@
+1 empezando con satelites..
+
+//2. import a landsat 8 image collection by running the folowin code
+var collection = ee.ImageCollection('LANDSAT/LC08/C02/T1_L2');
+//3. select an image from the collection by running a filter
+//define the region to c rop the image to
+var point = ui.Label({
+  value: 'Part 1: Exploring NDVI',
+  style:{
+  fontWeight: 'bold',
+  fontSize: '18px'
+  }});
+point.style().set('position', 'top-center');
+Map.add(point);
+
+
+
+// Print the point feature
+//print(point);
+
+// Define a feature with properties
+var pointWithProperties = ee.Feature(point, {name: 'aqui'});
+ // Create a polygon feature
+var geometry = ee.Geometry.Polygon(
+  [[-66.565, -18.432], [-66.565, -18.832], [-64.565, -18.432], [-64.565, -18.832]]);
+
+// select an image from the collection
+var image = collection.filterDate('2015-01-01','2015-01-02')
+		.filterBounds(geometry)
+		.sort('CLOUD_COVER')
+		.first();
+//crop image
+var image_cropped = image.clip(geometry);
+
+//4. Calculate NDVI:
+//var ndvi = image.normalizedDifference (['B5','B4']).rename('NDVI');
+var ndvi = image_cropped .normalizedDifference (['B5','B4']).rename('NDVI');
+//5. add the ndvi image to the map and display it
+Map.addLayer(ndvi,{min: -1, max: 1, palette:['blue','white','green'] }, 'NDVI');
+//center the map on the region
+Map.centerObject(geometry,11);
+//6. you can also export the ndvi map using
+Export.image.toDrive({
+image: ndvi,
+description:  'NDVI_map',
+scale: 30,
+region: geometry
+});
